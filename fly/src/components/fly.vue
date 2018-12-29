@@ -1,7 +1,7 @@
 <template>
     <div class="fly">
         <div class="diji" v-for="item in 10" :key>
-            <img :class="'diji' + item" :style="{left:djLeft.item + '%',bottom:djBottom + 'px'}" src="../assets/diji.png" alt="">
+            <img :class="'diji' + item" :style="{left:Math.random() * 96 + '%',bottom:djBottom + 'px'}" src="../assets/diji.png" alt="">
         </div>
         <!-- <div v-for="item in 6" :key>
             <img :class="'item' + item" :style="{bottom:zdBottom + 'px',left:zdLeft + item + '%'}" class="bullet" src="../assets/feiji.png" alt="">
