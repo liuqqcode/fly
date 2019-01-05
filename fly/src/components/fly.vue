@@ -1,5 +1,5 @@
 <template>
-    <div class="fly" @keydown="show($event)">
+    <div class="fly">
         <div class="diji" v-for="item in dj" :key>
             <img :class="'diji' + item.left" :style="{left:item.left + '%',bottom:djBottom + 'px'}" src="../assets/diji.png" alt="">
             敌机{{item.left}}底边{{djBottom}}
@@ -10,7 +10,6 @@
         <!-- <img class="bullet" :style="{bottom:zdBottom + 'px',left:zdLeft + '%'}" src="../assets/feiji.png" alt=""> -->
         <p>子弹{{zdLeft}}底边{{zdBottom}}</p>
         <img class="aircraft" ref="topInfo" :style="{bottom:numBottom + 'px',left:numLeft + '%'}"  src="../assets/fly.png" alt="" srcset="">
-        <input type="text" autofocus >
     </div>
 </template>
 <script>
@@ -62,35 +61,37 @@ export default {
 
     },
     created(){
-        
+        let that = this;
+        document.onkeydown = function (e) {
+            let key = window.event.keyCode;
+            console.log(key);
+            
+            if(key == 38 && that.numBottom < 500){
+                that.numBottom += 10;
+                console.log(that.numLeft);
+                return that.numLeft;
+            }
+            if(key == 40 && that.numBottom > 0){
+                that.numBottom -= 10;
+                console.log(that.numLeft);
+                return that.numLeft;
+
+            }
+            if(key == 37 && that.numLeft > 2){
+                that.numLeft -= 3;
+                console.log(that.numLeft);
+                return that.numLeft;
+
+            }
+            if(key == 39 && that.numLeft < 96){
+                that.numLeft += 3;
+                console.log(that.numLeft);
+                return that.numLeft;
+
+            }
+        }
     },
     methods:{
-        
-        show: function (ev) {
-            if(ev.keyCode == 38 && this.numBottom < 500){
-                this.numBottom += 10;
-                console.log(this.numLeft);
-                return this.numLeft;
-            }
-            if(ev.keyCode == 40 && this.numBottom > 0){
-                this.numBottom -= 10;
-                console.log(this.numLeft);
-                return this.numLeft;
-
-            }
-            if(ev.keyCode == 37 && this.numLeft > 2){
-                this.numLeft -= 3;
-                console.log(this.numLeft);
-                return this.numLeft;
-
-            }
-            if(ev.keyCode == 39 && this.numLeft < 96){
-                this.numLeft += 3;
-                console.log(this.numLeft);
-                return this.numLeft;
-
-            }
-        },
         zidan(){
             if(this.zdBottom < 1000){
                 this.zdBottom += 10;
