@@ -1,14 +1,14 @@
 <template>
     <div class="fly">
-        <div class="diji" v-for="item in dj" :key>
+        <div class="diji" v-for="item in dj" :key='item.index'>
             <img :class="'diji' + item.left" :style="{left:item.left + '%',bottom:djBottom + 'px'}" src="../assets/diji.png" alt="">
-            敌机{{item.left}}底边{{djBottom}}
+            敌机距离左边{{item.left}}%，底边{{djBottom}}px
         </div>
-        <div v-for="item in zd" :key>
-            <img :class="'item' + item.id" :style="{bottom:item.zdBottom + zdBottom + 'px',left:zdLeft +'%'}" class="bullet" src="../assets/feiji.png" alt="">
+        <div v-for="item in zd" :key='item.index'>
+            <img :class="'item' + item.id" :style="{bottom:item.zdBottom + zdBottom + 'px',left:zdLeft + '%' }" class="bullet" src="../assets/feiji.png" alt="">
         </div>
         <!-- <img class="bullet" :style="{bottom:zdBottom + 'px',left:zdLeft + '%'}" src="../assets/feiji.png" alt=""> -->
-        <p>子弹{{zdLeft}}底边{{zdBottom}}</p>
+        <p>子弹距离左边{{zdLeft}}底边{{zdBottom}}</p>
         <img class="aircraft" ref="topInfo" :style="{bottom:numBottom + 'px',left:numLeft + '%'}"  src="../assets/fly.png" alt="" srcset="">
     </div>
 </template>
@@ -16,6 +16,7 @@
 export default { 
     data(){
         return{
+            zidanPosition: [],
             numBottom:10,   //我的飞机距离底边
             numLeft:50,     //我的飞机距离左边
             zdBottom:100,   //子弹底边
@@ -23,16 +24,8 @@ export default {
             djBottom:900,   //敌机底边
             dj:[            //敌机数量 敌机距离左边
                 {
-                    left:Math.floor( Math.random() * 100)
-                },{
-                    left:Math.floor( Math.random() * 100)
-                },{
-                    left:Math.floor( Math.random() * 100)
-                },{
-                    left:Math.floor( Math.random() * 100)
-                }
-
-            ],
+                    left:(Math.floor( Math.random() * 10))*10
+                }],
             zd:[
                 {
                     id:1,
@@ -57,7 +50,9 @@ export default {
         setInterval(() => {
             this.diji() 
         }, 100);
-        this.zidanZdiji()
+        setInterval(() => {
+            this.zidanZdiji()
+        },10)
 
     },
     created(){
@@ -65,7 +60,7 @@ export default {
         document.onkeydown = function (e) {
             let key = window.event.keyCode;
             console.log(key);
-            
+            // this.zdLeft = this.zidanPosition[0]
             if(key == 38 && that.numBottom < 500){
                 that.numBottom += 10;
                 console.log(that.numLeft);
@@ -78,13 +73,13 @@ export default {
 
             }
             if(key == 37 && that.numLeft > 2){
-                that.numLeft -= 3;
+                that.numLeft -= 10;
                 console.log(that.numLeft);
                 return that.numLeft;
 
             }
             if(key == 39 && that.numLeft < 96){
-                that.numLeft += 3;
+                that.numLeft += 10;
                 console.log(that.numLeft);
                 return that.numLeft;
 
@@ -93,12 +88,13 @@ export default {
     },
     methods:{
         zidan(){
-            if(this.zdBottom < 1000){
+            if(this.zdBottom < 1000){ // 子弹距离底部1000
                 this.zdBottom += 10;
-                this.zdLeft = this.numLeft ;
-
             }else{
-                this.zdBottom = 100
+                this.zidanPosition = []
+                this.zdLeft = this.numLeft ;
+                this.zidanPosition.push(this.numLeft)
+                this.zdBottom = this.numBottom
             }
         },
         diji(){
@@ -112,16 +108,8 @@ export default {
             }
         },
         zidanZdiji(){
-                console.log(this.djBottom);
-                console.log(this.zdBottom);
-                console.log(this.dj[0].left); 
-                console.log(this.zdLeft);  
-            if(this.djBottom > this.zdBottom && this.dj[0].left + 13 > this.zdLeft && this.dj[0].left - 13 < this.zdLeft){
+            if(this.zdLeft == this.dj[0].left){
                 console.log("撞上了");
-                console.log(this.djBottom);
-                console.log(this.zdBottom);
-                console.log(this.dj[0].left); 
-                console.log(this.zdLeft);  
             }
         }
     }
